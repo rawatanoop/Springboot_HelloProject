@@ -80,8 +80,8 @@ public class LoginController extends WebSecurityConfigurerAdapter {
 	}
 
 	/****
-	 * This method invalidates the session and redirects to the login page, so that any further request will not
-	 * be served .
+	 * This method invalidates the session and redirects to the login page, so
+	 * that any further request will not be served .
 	 * 
 	 * @param session
 	 * @return

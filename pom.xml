@@ -70,6 +70,12 @@
 			<artifactId>hsqldb</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- sentry error tracking dependency  -->
+		<dependency>
+    <groupId>com.getsentry.raven</groupId>
+    <artifactId>raven-log4j</artifactId>
+    <version>7.8.0</version>
+</dependency>
 
 	</dependencies>
 
