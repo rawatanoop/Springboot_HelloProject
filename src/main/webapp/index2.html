@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("button").click(function(){
+      $.get("/donationCamp/all", function(data, status){
+      $.each(data, function (i, item) {
+    // alert("Data: "+item.id+ " \nStatus: " + status);
+     tr = $('<tr/>');
+        tr.append("<td>" + data[i].address + "</td>");
+        tr.append("<td>" + data[i].startDate + "</td>");
+        tr.append("<td>" + data[i].endDate + "</td>");
+        tr.append("<td>" + data[i].unit + "</td>");
+        tr.append("<td>" + data[i].unitLeft + "</td>");
+        $('#location').append(tr);
+     
+  
+});      
+      });
+  });
+});
+</script>
+</head>
+<body>
+Welcome in LifeLine 
+
+
+<button>Items available </button>
+<table id="location" border='1'>
+  <tr>
+      <th>Address</th>
+       <th>StartDate</th>
+       <th>EndDate</th>
+       <th>Total Units Required</th>
+       <th>Now Required</th>
+  </tr>
+</table>
+
+</body>
+</html>

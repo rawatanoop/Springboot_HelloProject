@@ -1,0 +1,150 @@
+FORMAT: 1A
+HOST: http://localhost:8080/
+
+# rawatanoop
+
+LifeLine provides a plateform to Donation Camps and Donors to connect each other.
+
+## Donation Camp Add [/donationCamp/save]
+
+### Get Donation Camp by id [POST]
++   Request (application/json)
+
+        [
+        {"id":1,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        ]
+
++ Response 400
+
+
+## Donation Camp Delete [/donationCamp/delete/{id}]
+
+### Get Donation Camp by id [DELETE]
+
++ Response 400 (application/json)
+
+        [
+        {"id":1,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        ]
+        
+## My Donation Camp List [/donationCamp/myCamps]
+
+### List All Donation Camps created by User[GET]
+
++ Response 200 (application/json)
+
+        [
+        {"id":1,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":2,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":3,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":5,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7}
+        ]
+
+## Donation Camp List [/donationCamp/all]
+
+### List All Donation Camps [GET]
+
++ Response 200 (application/json)
+
+        [
+        {"id":1,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":2,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":3,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":5,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7}
+        ]
+
+## Donation Camp Details [/donationCamp/{id}]
+
+### Get Donation Camp by id [GET]
+
++ Response 200 (application/json)
+
+        [
+        {"id":1,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        ]
+        
+## Lists all Volunteers for the Camp [/donationCamp/{id}/volunteers]
+
+### Get all Donation Camp by id [GET]
+
++ Response 200 (application/json)
+
+
+## Lists all Requessts of Volunteers for the Camp [/donationCamp/{id}/requests]
+### Get all Donation Camp by id [GET]
++ Response 200 (application/json)
+
+ 
+        
+## Donation Camp Volunteer request [/volunteer/request]
+
+### Get Donation Camp by id [POST]
+
++   Request (application/json)
+
+        [
+        {"userID":2,"campCategoryID":2,"unit":3}
+        ]
+
++ Response 400
+
+
+## Deleting  a volunteer request [/volunteer/delete/{id}]
+
+### Get Donation Camp by id [DELETE]
+
++ Response 201
+        
+## Lists all requests of a volunteer [/volunteeer/myRequest]
+
+### List all requests for a valunteer Camps [GET]
+
++ Response 200 (application/json)
+
+        [
+        {"id":1,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":2,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":3,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":5,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7}
+        ]
+
+## Lists all camps of a volunteer [/volunteeer/myCamps]
+
+### List All Donation Camps for a Voluneer [GET]
+
++ Response 200 (application/json)
+
+        [
+        {"id":1,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":2,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":3,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":5,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7}
+        ]
+
+        
+## Lists all Donation Camps in an Area [/search/{area}]
+
+### List Donation Camps in an Area [GET]
+
++ Response 200 (application/json)
+
+        [
+        {"id":1,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":2,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":3,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":5,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7}
+        ] 
+
+        
+## Lists all Donation Camps [/search/all]
+
+### List All Donation Camps [GET]
+
++ Response 200 (application/json)
+
+        [
+        {"id":1,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":2,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":3,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7},
+        {"id":5,"userID":2,"campCategoryID":2,"address":"2","startDate":0,"endDate":1235000,"unit":23,"unitLeft":7}
+        ]
