@@ -2,8 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>helloworld.lifeline</groupId>
-	<artifactId>LifeLine</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>lifeline</artifactId>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -100,6 +99,14 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.17</version>
+				<configuration>
+					<configLocation>google_checks.xml</configLocation>
+				</configuration>
 			</plugin>
 		</plugins>
 
