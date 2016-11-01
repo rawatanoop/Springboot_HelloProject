@@ -55,6 +55,6 @@ public class Logger {
 	 * @param message
 	 */
 	public void error(Object message) {
-		logger.debug(message);
+		logger.error(message);
 	}
 }

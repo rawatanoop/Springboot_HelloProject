@@ -1,215 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Life Line</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style>
-    /* Remove the navbar's default rounded borders and increase the bottom margin */
-    .navbar {
-      margin-bottom: 50px;
-      border-radius: 0;
-    }
-    
-    /* Remove the jumbotron's default bottom margin */
-     .jumbotron {
-      margin-bottom: 0;
-    }
-   
-    /* Add a gray background color and some padding to the footer */
-    footer {
-      background-color: #f2f2f2;
-      padding: 25px;
-    }
-  </style>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"> </script>
-  <script>
-$(document).ready(function(){
-  $('#searchButton').click(function(){
-      $.get("search", 'address='+$('#addressSelector').val() ,function(data, status){
-      $.each(data, function (i, item) {
-    // alert("Data: "+item.id+ " \nStatus: " + status);
-     tr = $('<tr/>');
-        tr.append("<td>" + (i+1)+ "</td>");
-        tr.append("<td>" + data[i].address + "</td>");
-        tr.append("<td>" + data[i].startDate + "</td>");
-        tr.append("<td>" + data[i].endDate + "</td>");
-        tr.append("<td>" + data[i].unit + "</td>");
-        tr.append("<td>" + data[i].unit + "</td>");
-        tr.append("<td>" + data[i].unit + "</td>");
-        tr.append("<td>" + data[i].unitLeft + "</td>");
-        tr.append("<td> <input id="+ "unit_"+data[i].id+ " type=\"text\"> </td>");
-        
- tr.append($('<button/>', {
-        text: 'Send Request', 
-        id: "sendRequest_"+data[i].id ,
-        val: data[i].id ,
-        click: function() { 
-
-          $.ajax({
-url : 'volunteer/save',
-type : 'POST',
-contentType : 'application/json',
-data : JSON.stringify({
-"userID" : $("#unit_"+$(this).val()).val(),
-"campID" : $(this).val(),
-"requestStatus" : "Request"
-}),
-dataType : 'json'
-
-});
-          $("#unit_"+$(this).val()).prop("disabled", true);
-          $(this).prop("disabled", true);
-          $(this).prop("text", "Request Sent");
-
-          alert("hello"+$(this).val()); }
-    }));
-        
-        $('#donationCampTable').append(tr);
-     
-  
-});      
-      });
-  });
-      
-});      
-
-</script>
-
-<script>
-
-$(document).ready(function(){
-    var id  = 1;
-      $.get("volunteer/"+id+"/acceptedRequest" ,function(data, status){
-      $.each(data, function (i, item) {
-    // alert("Data: "+item.id+ " \nStatus: " + status);
-
-     tr = $('<tr/>');
-        tr.append("<td>" + (i+1)+ "</td>");
-        tr.append("<td>" + data[i].address + "</td>");
-        tr.append("<td>" + data[i].startDate + "</td>");
-        tr.append("<td>" + data[i].endDate + "</td>");
-        tr.append("<td>" + data[i].categoryName + "</td>");
-        tr.append("<td>" + data[i].subCategoryName + "</td>");
-        tr.append("<td>" + data[i].unit + "</td>");
-        tr.append("<td>" + data[i].unitLeft + "</td>");
-        tr.append("<td>" + data[i].unitDonate + "</td>");
-      
-        $('#acceptedTable').append(tr);  
-});     });      
-
-$.get("volunteer/"+id+"/pendingRequest" ,function(data, status){
-      $.each(data, function (i, item) {
-    // alert("Data: "+item.id+ " \nStatus: " + status);
-
-     tr = $('<tr/>');
-        tr.append("<td>" + (i+1)+ "</td>");
-        tr.append("<td>" + data[i].address + "</td>");
-        tr.append("<td>" + data[i].startDate + "</td>");
-        tr.append("<td>" + data[i].endDate + "</td>");
-        tr.append("<td>" + data[i].categoryName + "</td>");
-        tr.append("<td>" + data[i].subCategoryName + "</td>");
-        tr.append("<td>" + data[i].unit + "</td>");
-        tr.append("<td>" + data[i].unitLeft + "</td>");
-        tr.append("<td>" + data[i].unitDonate + "</td>");
-      
-        $('#pendingTable').append(tr);  
-});     });   
-
-    });      
-
-</script>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <title>Life Line</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/common.css">
 
 
-</head>
-<body>
+  </head>
+  <body>
 
-<div class="jumbotron">
-  <div class="container text-center">
-    <h1>Life Line</h1>
-    <p>Save Life by Donating</p>
-  </div>
-</div>
-
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li><a href="donate.html" >Donate</a></li>
+          <li ><a href="createDonationCamp.html"> Create Donation Camp</a></li>
+          <li class="active"><a>My Requests</a></li>
+          <li ><a href="myCamps.html">My Camps</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="logout"><span class="glyphicon glyphicon glyphicon-log-out"></span> Log-out </a></li>
+        </ul>
+      </div>
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li><a href="donate.html" >Donate</a></li>
-        <li ><a href="createDonationCamp.html"> Create Donation Camp</a></li>
-        <li class="active"><a>My Requests</a></li>
-        <li ><a href="myCamps.html">My Camps</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="logout"><span class="glyphicon glyphicon glyphicon-log-out"></span> Log-out </a></li>
-      </ul>
+  </nav>
+
+
+
+  <div class="container" >
+    <h2> Pending Requests</h2>
+    <div class="table-responsive" >
+    <table class="table" id="pendingTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Address</th>
+          <th>StartDate</th>
+          <th>EndDate</th>
+          <th>Category</th>
+          <th>SubCategory</th>
+          <th>Total Units Required</th>
+          <th>Now Required </th>
+          <th>Donate Unit </th>
+          <th></th>
+        </tr>
+      </thead>
+    </table>
     </div>
-  </div>
-</nav>
+    </div>
+  <div class="container" >
+    <h2> Accepted Request</h2>
+    <div class="table-responsive" >
+    <table class="table" id="acceptedTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Address</th>
+          <th>StartDate</th>
+          <th>EndDate</th>
+          <th>Category</th>
+          <th>SubCategory</th>
+          <th>Total Units Required</th>
+          <th>Now Required </th>
+          <th>Donate Unit </th>
+          <th></th>
+        </tr>
+      </thead>
+    </table>
+    </div>
+    </div>
 
 
+  <br><br>
 
-<div class="container" >
-  <h2> Pending Requests</h2>
-  <div class="table-responsive" >
-  <table class="table" id="pendingTable">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Address</th>
-        <th>StartDate</th>
-        <th>EndDate</th>
-        <th>Category</th>
-        <th>SubCategory</th>
-        <th>Total Units Required</th>
-        <th>Now Required </th>
-        <th>Donate Unit </th>
-        <th></th>
-      </tr>
-    </thead>
-  </table>
-  </div>
-  </div>
-<div class="container" >
-  <h2> Accepted Request</h2>
-  <div class="table-responsive" >
-  <table class="table" id="acceptedTable">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Address</th>
-        <th>StartDate</th>
-        <th>EndDate</th>
-        <th>Category</th>
-        <th>SubCategory</th>
-        <th>Total Units Required</th>
-        <th>Now Required </th>
-        <th>Donate Unit </th>
-        <th></th>
-      </tr>
-    </thead>
-  </table>
-  </div>
-  </div>
+  <footer class="container-fluid text-center">
+    <p>Life Line Copyright</p>
+  </footer>
 
-
-<br><br>
-
-<footer class="container-fluid text-center">
-  <p>Life Line Copyright</p>
-</footer>
-
-</body>
-</html>
+  </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>  
+    <script src="js/myrequests.js"> </script>
+  </html>
 

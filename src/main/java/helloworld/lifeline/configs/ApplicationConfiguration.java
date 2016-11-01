@@ -18,6 +18,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import helloworld.lifeline.controller.LoginController;
+import helloworld.lifeline.misc.Logger;
 import inti.ws.spring.exception.client.ForbiddenException;
 
 @Configuration
@@ -107,12 +109,24 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
  *
  */
 class TransactionInterceptor extends HandlerInterceptorAdapter {
+	private static final Logger logger = Logger.getInstance(TransactionInterceptor.class);
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		logger.info("Request "+request.getRequestURI()+" preprocessing in TransactionInterceptor");
 		StandardSessionFacade session = (StandardSessionFacade) request.getSession();
-		if (!request.getRequestURI().equals("/home") && session.getAttribute("user") == null)
+		if (request.getRequestURI().toLowerCase().contains(("/error"))) {
+			logger.error("Request for error page : Request preprocessing in TransactionInterceptor");
+			return true;
+		}
+
+		if (!request.getRequestURI().toLowerCase().contains(("/home")) && session.getAttribute("user") == null) {
+
+			logger.error("Request "+ request.getRequestURI() +" rejected :User is not logged-in");
 			throw new ForbiddenException("User is not logged-in");
+		}
+		logger.info("Valid request  "+request.getRequestURI()+" : Request preprocessing in TransactionInterceptor");
 		return true;
 	}
 }

@@ -44,8 +44,10 @@ public class LoginController extends WebSecurityConfigurerAdapter {
 	@ResponseBody
 	public String login(HttpSession session, Principal principal) throws ForbiddenException, UnauthorizedException {
 		logger.info("User is trying to login");
-		if (principal == null)
+		if (principal == null) {
+			logger.error("Principal object is null");
 			throw new ForbiddenException("User google authenticaion is missing : Access Denied");
+		}
 		OAuth2Authentication auth = (OAuth2Authentication) principal;
 
 		if (auth.isAuthenticated()) {
@@ -54,8 +56,10 @@ public class LoginController extends WebSecurityConfigurerAdapter {
 					.getDetails();
 
 			String domain = details.get("hd");
-			if (!"practo.com".equalsIgnoreCase(domain))
+			if (!"practo.com".equalsIgnoreCase(domain)) {
+				logger.error("Domain name does not contains  'practo.com'");
 				throw new UnauthorizedException("Domain name other than 'practo.com' are not allowed");
+			}
 
 			String email = details.get("email");
 			String name = details.get("name");
@@ -74,6 +78,7 @@ public class LoginController extends WebSecurityConfigurerAdapter {
 			return name;
 
 		} else {
+			logger.error("Login failed : Invalid Credentials ");
 			throw new UnauthorizedException("Login failed. Please try again");
 		}
 
