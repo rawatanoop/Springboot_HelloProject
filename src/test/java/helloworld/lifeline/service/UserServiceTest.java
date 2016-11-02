@@ -22,7 +22,7 @@ public class UserServiceTest {
 
 	@Autowired
 	UserService userService;
-	
+
 	@Test()
 	public void testCreateUser() throws BadRequestException {
 		UserModel user1 = new UserModel();
@@ -34,7 +34,6 @@ public class UserServiceTest {
 		Assert.assertEquals(user1.getEmail(), user2.getEmail());
 		Assert.assertEquals(user1.getMobile(), user2.getMobile());
 	}
-
 
 	@Test(expected = BadRequestException.class)
 	public void testGetByIDError() throws BadRequestException {

@@ -24,7 +24,7 @@ public class SearchController {
 	@Autowired
 	private DonationCampService dcService;
 
-	private static final Logger logger = Logger.getInstance(DonationCampController.class);
+	private static final Logger logger = Logger.getInstance(SearchController.class);
 
 	/***
 	 * Return all the available donation camps.

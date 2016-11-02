@@ -33,7 +33,7 @@ public class VolunteerController {
 
 	@Autowired
 	private DonationCampService dcService;
-	private static final Logger logger = Logger.getInstance(LoginController.class);
+	private static final Logger logger = Logger.getInstance(VolunteerController.class);
 
 	/****
 	 * Returns the camp associated with amp id @param id
@@ -62,8 +62,9 @@ public class VolunteerController {
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.CREATED)
-	public void create(@RequestBody VolunteerModel model) throws BadRequestException {
+	public void create(@RequestBody VolunteerModel model, HttpSession session) throws BadRequestException {
 		logger.info("Request for creating a volunteer record started");
+		model.setUserID(((UserModel) session.getAttribute("user")).getId());
 		volunteerService.create(model);
 		logger.info("Request for creating a volunteer record  ended successfully");
 
@@ -126,7 +127,7 @@ public class VolunteerController {
 		logger.info("Request  with status 'Request' for returning camp details for a volunteer ended successfully");
 		return list;
 	}
-	
+
 	/***
 	 * Return all the camps details(with status 'Request') for a particular
 	 * volunteer.

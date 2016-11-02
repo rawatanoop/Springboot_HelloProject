@@ -32,7 +32,6 @@ public class UserDao implements IUserDao<User> {
 		return null;
 	}
 
-
 	@Override
 	@Transactional
 	public User getById(Integer userID) {
@@ -43,7 +42,6 @@ public class UserDao implements IUserDao<User> {
 			return user;
 		return null;
 	}
-
 
 	@Override
 	@Transactional
@@ -58,7 +56,7 @@ public class UserDao implements IUserDao<User> {
 
 	@Override
 	public void delete(User entity) {
-		
+
 	}
 
 	@Override
@@ -68,7 +66,7 @@ public class UserDao implements IUserDao<User> {
 
 	@Override
 	public void update(User entity) {
-		
+
 	}
 
 }

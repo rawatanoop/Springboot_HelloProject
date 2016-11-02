@@ -20,10 +20,10 @@ $(document).ready(function(){
     tr = $('<tr/>');
     tr.append("<td>" + (i+1)+ "</td>");
     tr.append("<td>" + data[i].address + "</td>");
-    var myDate = new Date( data[i].startDate *1000);
-    tr.append("<td>" + myDate.toLocaleString() + "</td>"); 
-    myDate = new Date( data[i].endDate *1000);
-    tr.append("<td>" + myDate.toLocaleString() + "</td>");
+    var myDate = new Date( data[i].startDate );
+    tr.append("<td>" + myDate.toDateString() + "</td>"); 
+    myDate = new Date( data[i].endDate );
+    tr.append("<td>" + myDate.toDateString() + "</td>");
     tr.append("<td>" + data[i].categoryName + "</td>");
     tr.append("<td>" + data[i].subCategoryName + "</td>");
     tr.append("<td>" + data[i].unit + "</td>");

@@ -29,7 +29,6 @@ public class Logger {
 		logger.info(message);
 	}
 
-
 	/**
 	 * 
 	 * @param message

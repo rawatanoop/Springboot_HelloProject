@@ -7,8 +7,8 @@ $(document).ready(function(){
       contentType : 'application/json',
       data : JSON.stringify({
         "unit" : $("#unit").val(),
-        "startDate" :$("#startDate").val(),
-        "endDate" : $("#endDate").val(),
+        "start" :$("#startDate").val(),
+        "end" : $("#endDate").val(),
         "campCategoryID":$("#categorySelector").val(),
         "address" :$("#addressSelector").val()
       }),

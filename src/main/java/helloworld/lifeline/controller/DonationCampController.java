@@ -1,5 +1,7 @@
 package helloworld.lifeline.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,12 +44,17 @@ public class DonationCampController {
 	 * @param camp
 	 * @param session
 	 * @throws BadRequestException
+	 * @throws ParseException
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.CREATED)
-	public void create(@RequestBody DonationCampModel camp, HttpSession session) throws BadRequestException {
+	public void create(@RequestBody DonationCampModel camp, HttpSession session)
+			throws BadRequestException, ParseException {
 		logger.info("Request for creating  a camp started");
+		SimpleDateFormat dateFrmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+		camp.setStartDate(dateFrmt.parse(camp.getStart()));
+		camp.setEndDate(dateFrmt.parse(camp.getEnd()));
 		camp.setUserID(((UserModel) session.getAttribute("user")).getId());
 		camp.setUnitLeft(camp.getUnit());
 		dcService.create(camp);

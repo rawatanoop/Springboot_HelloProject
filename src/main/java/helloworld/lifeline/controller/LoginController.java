@@ -84,25 +84,6 @@ public class LoginController extends WebSecurityConfigurerAdapter {
 
 	}
 
-	/****
-	 * This method invalidates the session and redirects to the login page, so
-	 * that any further request will not be served .
-	 * 
-	 * @param session
-	 * @return
-	 */
-	@RequestMapping(value = "/logout")
-	public String logOut(HttpSession session) {
-		session.invalidate();
-		logger.info("Session is invalidated : logged out from account.");
-		return "redirect:/index.html";
-	}
-
-	@RequestMapping(value = "/hello")
-	public String test(HttpSession session) {
-		return "index2";
-	}
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.antMatcher("/**").authorizeRequests().antMatchers("/**", "/login**", "/webjars/**", "/js/**").permitAll()

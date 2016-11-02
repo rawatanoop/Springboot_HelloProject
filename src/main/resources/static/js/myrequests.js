@@ -8,8 +8,10 @@
        tr = $('<tr/>');
           tr.append("<td>" + (i+1)+ "</td>");
           tr.append("<td>" + data[i].address + "</td>");
-          tr.append("<td>" + data[i].startDate + "</td>");
-          tr.append("<td>" + data[i].endDate + "</td>");
+          myDate = new Date( data[i].startDate );
+          tr.append("<td>" + myDate.toDateString()+ "</td>");
+          myDate = new Date( data[i].endDate );
+          tr.append("<td>" + myDate.toDateString() + "</td>");
           tr.append("<td>" + data[i].categoryName + "</td>");
           tr.append("<td>" + data[i].subCategoryName + "</td>");
           tr.append("<td>" + data[i].unit + "</td>");
@@ -27,8 +29,10 @@
        tr = $('<tr/>');
           tr.append("<td>" + (i+1)+ "</td>");
           tr.append("<td>" + data[i].address + "</td>");
-          tr.append("<td>" + data[i].startDate + "</td>");
-          tr.append("<td>" + data[i].endDate + "</td>");
+          myDate = new Date( data[i].startDate );
+          tr.append("<td>" + myDate.toDateString()+ "</td>");
+          myDate = new Date( data[i].endDate );
+          tr.append("<td>" + myDate.toDateString() + "</td>");
           tr.append("<td>" + data[i].categoryName + "</td>");
           tr.append("<td>" + data[i].subCategoryName + "</td>");
           tr.append("<td>" + data[i].unit + "</td>");
@@ -46,8 +50,10 @@
        tr = $('<tr/>');
           tr.append("<td>" + (i+1)+ "</td>");
           tr.append("<td>" + data[i].address + "</td>");
-          tr.append("<td>" + data[i].startDate + "</td>");
-          tr.append("<td>" + data[i].endDate + "</td>");
+          myDate = new Date( data[i].startDate );
+          tr.append("<td>" + myDate.toDateString()+ "</td>");
+          myDate = new Date( data[i].endDate );
+          tr.append("<td>" + myDate.toDateString() + "</td>");
           tr.append("<td>" + data[i].categoryName + "</td>");
           tr.append("<td>" + data[i].subCategoryName + "</td>");
           tr.append("<td>" + data[i].unit + "</td>");

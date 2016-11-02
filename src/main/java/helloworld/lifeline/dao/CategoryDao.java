@@ -21,7 +21,6 @@ public class CategoryDao implements ICategoryDao<DonationCampCategory> {
 		return _sessionFactory.getCurrentSession();
 	}
 
-
 	@Override
 	@Transactional
 	@SuppressWarnings("unchecked")
@@ -38,24 +37,20 @@ public class CategoryDao implements ICategoryDao<DonationCampCategory> {
 		return null;
 	}
 
-
 	@Override
 	public Serializable save(DonationCampCategory entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
 	@Override
 	public void delete(DonationCampCategory entity) {
-		
-	}
 
+	}
 
 	@Override
 	public void update(DonationCampCategory entity) {
-		
-	}
 
+	}
 
 }

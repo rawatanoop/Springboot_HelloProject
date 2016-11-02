@@ -7,6 +7,8 @@ public class DonationCampModel {
 	private int userID;
 	private int campCategoryID;
 	private String address;
+	private String start;
+	private String end;
 	private Date startDate;
 	private Date endDate;
 	private int unit;
@@ -103,4 +105,11 @@ public class DonationCampModel {
 		this.unitLeft = unitLeft;
 	}
 
+	public String getStart() {
+		return start;
+	}
+
+	public String getEnd() {
+		return end;
+	}
 }

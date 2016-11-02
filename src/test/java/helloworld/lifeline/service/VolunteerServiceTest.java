@@ -75,7 +75,7 @@ public class VolunteerServiceTest {
 	}
 
 	@Test(expected = BadRequestException.class)
-	public void testUpdateError() throws BadRequestException{
+	public void testUpdateError() throws BadRequestException {
 		VolunteerModel volunteer = UtilityTest.getVolTestModel("WrongRequest", 10);
 		volunteerService.update(volunteer);
 	}

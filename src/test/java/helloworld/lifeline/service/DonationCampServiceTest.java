@@ -76,17 +76,17 @@ public class DonationCampServiceTest {
 
 	@Test(expected = NotFoundException.class)
 	public void testGetVolunteerForCamp() throws NotFoundException, BadRequestException {
-		 
-		 List<UserModel> campModels = dcService.getVolunteerForCamp(UtilityTest.Camp_ID, "Request");
+
+		List<UserModel> campModels = dcService.getVolunteerForCamp(UtilityTest.Camp_ID, "Request");
 		Assert.assertNotNull(campModels);
 	}
 
 	@Test(expected = BadRequestException.class)
-	public void testGetByIDError() throws ObjectNotFoundException, BadRequestException  {
-		  dcService.getByID(-1);
-		
+	public void testGetByIDError() throws ObjectNotFoundException, BadRequestException {
+		dcService.getByID(-1);
+
 	}
-	
+
 	@Test
 	public void testUpdate() throws NotFoundException, ObjectNotFoundException, BadRequestException {
 		List<DonationCampModel> campModels = dcService.getByUserID(1);
