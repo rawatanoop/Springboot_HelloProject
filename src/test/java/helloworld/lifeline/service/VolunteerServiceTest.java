@@ -56,6 +56,11 @@ public class VolunteerServiceTest {
 		}
 	}
 
+	@Test(expected = BadRequestException.class)
+	public void testGetByCampIDError() throws BadRequestException {
+		volunteerService.getByCampID(-1);
+	}
+
 	@Test
 	public void testUpdate() throws BadRequestException {
 		try {
@@ -69,6 +74,12 @@ public class VolunteerServiceTest {
 		Assert.assertEquals(volunteer.getRequestStatus(), "Accept");
 	}
 
+	@Test(expected = BadRequestException.class)
+	public void testUpdateError() throws BadRequestException{
+		VolunteerModel volunteer = UtilityTest.getVolTestModel("WrongRequest", 10);
+		volunteerService.update(volunteer);
+	}
+
 	@Test
 	public void testGetVolunteerForCamp() throws NotFoundException {
 		List<VolunteerModel> list = volunteerService.getVolunteerForCamp(UtilityTest.Camp_ID, "Request");
@@ -77,4 +88,9 @@ public class VolunteerServiceTest {
 		}
 	}
 
+	@Test(expected = NotFoundException.class)
+	public void testGetVolunteerForCampError() throws NotFoundException {
+		volunteerService.getVolunteerForCamp(UtilityTest.Camp_ID, "WrongStatus");
+
+	}
 }

@@ -14,7 +14,7 @@ $(document).ready(function(){
   $('#searchButton').click(function(){
     $.get( "search/filter", { address: $('#addressSelector').val(), category: $('#categorySelector').val() } )
     .done(function( data ) {
-      $("#donationCampTable tr").remove();
+      $("#donationCampTable tbody tr").remove();
       $.each(data, function (i, item) {
 
     tr = $('<tr/>');
@@ -28,10 +28,10 @@ $(document).ready(function(){
     tr.append("<td>" + data[i].subCategoryName + "</td>");
     tr.append("<td>" + data[i].unit + "</td>");
     tr.append("<td>" + data[i].unitLeft + "</td>");
-    tr.append("<td> <input id="+ "unit_"+data[i].id+ " type=\"number\"> </td>");
+    tr.append("<td> <input id="+ "unit_"+data[i].id+ " type=\"number\" max ="+ data[i].unitLeft+" min ="+1+"> </td>");
 
     tr.append($('<button/>', {
-      text: 'Send Request', 
+      text: 'Donate', 
       id: "sendRequest_"+data[i].id ,
       val: data[i].id ,
       click: function() { 

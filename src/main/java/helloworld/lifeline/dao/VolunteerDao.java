@@ -33,8 +33,6 @@ public class VolunteerDao implements IVolunteerDao<DonationCampVolunteer> {
 	@Override
 	@Transactional
 	public void delete(DonationCampVolunteer volunteer) {
-		getSession().delete(volunteer);
-		return;
 	}
 
 	@Override

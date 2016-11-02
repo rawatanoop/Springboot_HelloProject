@@ -32,19 +32,6 @@ public class UserDao implements IUserDao<User> {
 		return null;
 	}
 
-	@Override
-	@Transactional
-	public void delete(User user) {
-		getSession().delete(user);
-		return;
-	}
-
-	@Override
-	@Transactional
-	@SuppressWarnings("unchecked")
-	public List<User> getAll() {
-		return getSession().createQuery("from User").list();
-	}
 
 	@Override
 	@Transactional
@@ -57,12 +44,6 @@ public class UserDao implements IUserDao<User> {
 		return null;
 	}
 
-	@Override
-	@Transactional
-	public void update(User user) {
-		getSession().update(user);
-		return;
-	}
 
 	@Override
 	@Transactional
@@ -73,6 +54,21 @@ public class UserDao implements IUserDao<User> {
 			return null;
 
 		return (User) list.get(0);
+	}
+
+	@Override
+	public void delete(User entity) {
+		
+	}
+
+	@Override
+	public List<User> getAll() {
+		return null;
+	}
+
+	@Override
+	public void update(User entity) {
+		
 	}
 
 }

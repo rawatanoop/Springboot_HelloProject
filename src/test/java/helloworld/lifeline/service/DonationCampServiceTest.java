@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import helloworld.lifeline.model.DonationCampModel;
+import helloworld.lifeline.model.UserModel;
 import inti.ws.spring.exception.client.BadRequestException;
 import inti.ws.spring.exception.client.NotFoundException;
 
@@ -73,12 +74,19 @@ public class DonationCampServiceTest {
 
 	}
 
-	@Test
-	public void testGetVolunteerForCamp() {
-		// dcService.getVolunteerForCamp(UtilityTest., requestStatus)
-		//
+	@Test(expected = NotFoundException.class)
+	public void testGetVolunteerForCamp() throws NotFoundException, BadRequestException {
+		 
+		 List<UserModel> campModels = dcService.getVolunteerForCamp(UtilityTest.Camp_ID, "Request");
+		Assert.assertNotNull(campModels);
 	}
 
+	@Test(expected = BadRequestException.class)
+	public void testGetByIDError() throws ObjectNotFoundException, BadRequestException  {
+		  dcService.getByID(-1);
+		
+	}
+	
 	@Test
 	public void testUpdate() throws NotFoundException, ObjectNotFoundException, BadRequestException {
 		List<DonationCampModel> campModels = dcService.getByUserID(1);

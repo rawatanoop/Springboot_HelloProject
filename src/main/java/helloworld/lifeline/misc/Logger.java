@@ -29,17 +29,6 @@ public class Logger {
 		logger.info(message);
 	}
 
-	/***
-	 * 
-	 * @param message
-	 */
-	public void debug(Object message) {
-		logger.debug(message);
-	}
-
-	public void debug(Object message, Throwable t) {
-		logger.debug(message, t);
-	}
 
 	/**
 	 * 

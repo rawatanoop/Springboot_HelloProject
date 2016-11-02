@@ -114,7 +114,7 @@ public class VolunteerService implements IVolunteerService {
 	@Override
 	public List<VolunteerModel> getVolunteerForCamp(int campID, String status) throws NotFoundException {
 		List<DonationCampVolunteer> list = dcVolunteerDao.getVolunteerForCamp(campID, status);
-		if (list == null)
+		if (list == null|list.size()==0)
 			throw new NotFoundException(Utility.NotFound);
 
 		return getModelList(list);

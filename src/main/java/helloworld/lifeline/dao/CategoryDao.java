@@ -21,18 +21,6 @@ public class CategoryDao implements ICategoryDao<DonationCampCategory> {
 		return _sessionFactory.getCurrentSession();
 	}
 
-	@Override
-	@Transactional
-	public Serializable save(DonationCampCategory category) {
-		return getSession().save(category);
-	}
-
-	@Override
-	@Transactional
-	public void delete(DonationCampCategory category) {
-		getSession().delete(category);
-		return;
-	}
 
 	@Override
 	@Transactional
@@ -50,11 +38,24 @@ public class CategoryDao implements ICategoryDao<DonationCampCategory> {
 		return null;
 	}
 
+
 	@Override
-	@Transactional
-	public void update(DonationCampCategory category) {
-		getSession().update(category);
-		return;
+	public Serializable save(DonationCampCategory entity) {
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+
+	@Override
+	public void delete(DonationCampCategory entity) {
+		
+	}
+
+
+	@Override
+	public void update(DonationCampCategory entity) {
+		
+	}
+
 
 }

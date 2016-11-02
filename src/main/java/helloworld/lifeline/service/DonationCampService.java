@@ -61,7 +61,7 @@ public class DonationCampService /* implements IDonationCampService */ {
 		logger.info("Request for geting a donation camp record strted");
 		if (isValidID(id)) {
 			DonationCampModel model = getModel(dcDao.getById(id));
-			logger.error("Request for geting a donation camp record ended successfully");
+			logger.info("Request for geting a donation camp record ended successfully");
 			return model;
 		}
 

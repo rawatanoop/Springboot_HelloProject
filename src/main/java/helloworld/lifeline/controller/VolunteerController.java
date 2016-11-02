@@ -126,5 +126,26 @@ public class VolunteerController {
 		logger.info("Request  with status 'Request' for returning camp details for a volunteer ended successfully");
 		return list;
 	}
+	
+	/***
+	 * Return all the camps details(with status 'Request') for a particular
+	 * volunteer.
+	 * 
+	 * @param userID
+	 * @param session
+	 * @return
+	 * @throws BadRequestException
+	 */
+	@RequestMapping(value = "{id}/rejectedRequest")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<DonationCampModel> getRejectedReq(@PathVariable("id") int userID, HttpSession session)
+			throws BadRequestException {
+		logger.info("Request with status 'Reject' for returning camp details for a volunteer started");
+		List<DonationCampModel> list = volunteerService
+				.getCampForUser(((UserModel) session.getAttribute("user")).getId(), "Reject");
+		logger.info("Request  with status 'Reject' for returning camp details for a volunteer ended successfully");
+		return list;
+	}
 
 }
