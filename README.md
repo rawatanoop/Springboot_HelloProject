@@ -1,8 +1,11 @@
 # helloworld.lifeLine
 
 A sprinboot web project which provides the following functionalities-
+
 -Search for Donation camps.
+
 -Register to donate organs/blood/platelets.
+
 -Create Donation camps.
 
 
@@ -13,9 +16,9 @@ A sprinboot web project which provides the following functionalities-
 * Requirement Documentation for the project [here](https://docs.google.com/document/d/1S56McUzutsEDzLhY5F6Bpvsmo0Iug4LQuy45u6xt4dE/edit)
 [Project plan](https://docs.google.com/a/practo.com/spreadsheets/d/1-AENyGqzP8uD_YZSTLBkqmftwDEM1vkPPhKkhF_Bm0I/edit?usp=sharing)
 
-## Code Documentation
-* .....JavaDoc For code [here](http://ec2-52-32-21-2.us-west-2.compute.amazonaws.com/accomfinder/javadoc/index.html)
-* ....Test Coverage [here] (http://ec2-52-32-21-2.us-west-2.compute.amazonaws.com/accomfinder/jacoco/index.html)
+## Code Reports
+* JavaDoc For code [here](http://ec2-35-161-91-246.us-west-2.compute.amazonaws.com:8080/lifeline/doc/overview-summary.html)
+* Test Coverage [here] (http://ec2-35-161-91-246.us-west-2.compute.amazonaws.com:8080/lifeline/jacoco/index.html)
 * Google page speed results can be dound [here] (https://developers.google.com/speed/pagespeed/insights/?url=http%3A%2F%2Fec2-35-161-91-246.us-west-2.compute.amazonaws.com%3A8080%2Flifeline%2F&tab=desktop)
 
 ## Hosted on
