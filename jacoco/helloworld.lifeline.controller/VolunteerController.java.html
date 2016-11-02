@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>VolunteerController.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lifeline</a> &gt; <a href="index.source.html" class="el_package">helloworld.lifeline.controller</a> &gt; <span class="el_source">VolunteerController.java</span></div><h1>VolunteerController.java</h1><pre class="source lang-java linenums">package helloworld.lifeline.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import helloworld.lifeline.misc.Logger;
+import helloworld.lifeline.model.DonationCampModel;
+import helloworld.lifeline.model.UserModel;
+import helloworld.lifeline.model.VolunteerModel;
+import helloworld.lifeline.service.DonationCampService;
+import helloworld.lifeline.service.IVolunteerService;
+import inti.ws.spring.exception.client.BadRequestException;
+
+@Controller
+@RequestMapping(value = &quot;/volunteer&quot;)
+@ComponentScan(&quot;helloworld.lifeline.service&quot;)
+<span class="fc" id="L29">public class VolunteerController {</span>
+
+	@Autowired
+	private IVolunteerService volunteerService;
+
+	@Autowired
+	private DonationCampService dcService;
+<span class="fc" id="L36">	private static final Logger logger = Logger.getInstance(LoginController.class);</span>
+
+	/****
+	 * Returns the camp associated with amp id @param id
+	 * 
+	 * @param id
+	 * @return
+	 * @throws BadRequestException
+	 */
+	@RequestMapping(value = &quot;/{id}&quot;, method = RequestMethod.GET)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public DonationCampModel getByCampID(@PathVariable(&quot;id&quot;) int id) throws BadRequestException {
+<span class="nc" id="L49">		logger.info(&quot;Request for geting a cmp with given id started&quot;);</span>
+<span class="nc" id="L50">		DonationCampModel model = dcService.getByID(id);</span>
+<span class="nc" id="L51">		logger.info(&quot;Request for geting a cmp with given id ended successfully&quot;);</span>
+<span class="nc" id="L52">		return model;</span>
+
+	}
+
+	/****
+	 * Creates a record with given @param model for a volunteer request.
+	 * 
+	 * @param model
+	 * @throws BadRequestException
+	 */
+	@RequestMapping(value = &quot;/save&quot;, method = RequestMethod.POST)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.CREATED)
+	public void create(@RequestBody VolunteerModel model) throws BadRequestException {
+<span class="nc" id="L66">		logger.info(&quot;Request for creating a volunteer record started&quot;);</span>
+<span class="nc" id="L67">		volunteerService.create(model);</span>
+<span class="nc" id="L68">		logger.info(&quot;Request for creating a volunteer record  ended successfully&quot;);</span>
+
+<span class="nc" id="L70">	}</span>
+
+	/****
+	 * Updates a volunteer record with updated information @param model
+	 * 
+	 * @param model
+	 * @throws BadRequestException
+	 */
+	@RequestMapping(value = &quot;/update&quot;, method = RequestMethod.POST)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public void update(@RequestBody VolunteerModel model) throws BadRequestException {
+<span class="nc" id="L82">		logger.info(&quot;Request for updating a volunteer record started&quot;);</span>
+<span class="nc" id="L83">		volunteerService.update(model);</span>
+<span class="nc" id="L84">		logger.info(&quot;Request for updating a volunteer record  ended successfully&quot;);</span>
+
+<span class="nc" id="L86">	}</span>
+
+	/***
+	 * Return all the camps details(with status 'Accept') for a particular
+	 * volunteer.
+	 * 
+	 * @param userID
+	 * @param session
+	 * @return
+	 * @throws BadRequestException
+	 */
+	@RequestMapping(value = &quot;{id}/acceptedRequest&quot;)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List&lt;DonationCampModel&gt; getAccptedReq(@PathVariable(&quot;id&quot;) int userID, HttpSession session)
+			throws BadRequestException {
+<span class="nc" id="L102">		logger.info(&quot;Request with status 'Accept' for returning camp details for a volunteer started&quot;);</span>
+<span class="nc" id="L103">		List&lt;DonationCampModel&gt; list = volunteerService</span>
+<span class="nc" id="L104">				.getCampForUser(((UserModel) session.getAttribute(&quot;user&quot;)).getId(), &quot;Accept&quot;);</span>
+<span class="nc" id="L105">		logger.info(&quot;Request with status 'Accept' for returning camp details for a volunteer ended successfully&quot;);</span>
+<span class="nc" id="L106">		return list;</span>
+	}
+
+	/***
+	 * Return all the camps details(with status 'Request') for a particular
+	 * volunteer.
+	 * 
+	 * @param userID
+	 * @param session
+	 * @return
+	 * @throws BadRequestException
+	 */
+	@RequestMapping(value = &quot;{id}/pendingRequest&quot;)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List&lt;DonationCampModel&gt; getPendingReq(@PathVariable(&quot;id&quot;) int userID, HttpSession session)
+			throws BadRequestException {
+<span class="nc" id="L123">		logger.info(&quot;Request with status 'Request' for returning camp details for a volunteer started&quot;);</span>
+<span class="nc" id="L124">		List&lt;DonationCampModel&gt; list = volunteerService</span>
+<span class="nc" id="L125">				.getCampForUser(((UserModel) session.getAttribute(&quot;user&quot;)).getId(), &quot;Request&quot;);</span>
+<span class="nc" id="L126">		logger.info(&quot;Request  with status 'Request' for returning camp details for a volunteer ended successfully&quot;);</span>
+<span class="nc" id="L127">		return list;</span>
+	}
+	
+	/***
+	 * Return all the camps details(with status 'Request') for a particular
+	 * volunteer.
+	 * 
+	 * @param userID
+	 * @param session
+	 * @return
+	 * @throws BadRequestException
+	 */
+	@RequestMapping(value = &quot;{id}/rejectedRequest&quot;)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List&lt;DonationCampModel&gt; getRejectedReq(@PathVariable(&quot;id&quot;) int userID, HttpSession session)
+			throws BadRequestException {
+<span class="nc" id="L144">		logger.info(&quot;Request with status 'Reject' for returning camp details for a volunteer started&quot;);</span>
+<span class="nc" id="L145">		List&lt;DonationCampModel&gt; list = volunteerService</span>
+<span class="nc" id="L146">				.getCampForUser(((UserModel) session.getAttribute(&quot;user&quot;)).getId(), &quot;Reject&quot;);</span>
+<span class="nc" id="L147">		logger.info(&quot;Request  with status 'Reject' for returning camp details for a volunteer ended successfully&quot;);</span>
+<span class="nc" id="L148">		return list;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

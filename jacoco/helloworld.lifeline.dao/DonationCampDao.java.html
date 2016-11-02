@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DonationCampDao.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lifeline</a> &gt; <a href="index.source.html" class="el_package">helloworld.lifeline.dao</a> &gt; <span class="el_source">DonationCampDao.java</span></div><h1>DonationCampDao.java</h1><pre class="source lang-java linenums">package helloworld.lifeline.dao;
+
+import java.util.List;
+
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import helloworld.lifeline.entity.DonationCamp;
+
+@Repository
+<span class="fc" id="L16">public class DonationCampDao /* implements IDonationCampDao&lt;DonationCamp&gt; */ {</span>
+
+	@Autowired
+	private SessionFactory _sessionFactory;
+
+	private Session getSession() {
+<span class="fc" id="L22">		return _sessionFactory.getCurrentSession();</span>
+	}
+
+	@Transactional
+	public void save(DonationCamp camp) {
+<span class="fc" id="L27">		Session session = getSession();</span>
+<span class="fc" id="L28">		session.save(camp);</span>
+<span class="fc" id="L29">		return;</span>
+	}
+
+	@Transactional
+	public void delete(DonationCamp camp) {
+<span class="nc" id="L34">		getSession().delete(camp);</span>
+<span class="nc" id="L35">	}</span>
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+	@Transactional
+	public List&lt;DonationCamp&gt; getAll() {
+<span class="fc" id="L40">		return getSession().createQuery(&quot;from DonationCamp&quot;).list();</span>
+	}
+
+	@Transactional
+	public DonationCamp getById(Integer id) throws ObjectNotFoundException {
+<span class="fc" id="L45">		DonationCamp camp = getSession().load(DonationCamp.class, id);</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">		if (camp.getId() == id)</span>
+<span class="fc" id="L47">			return camp;</span>
+<span class="nc" id="L48">		return null;</span>
+	}
+
+	@Transactional
+	public void update(DonationCamp camp) {
+<span class="fc" id="L53">		getSession().update(camp);</span>
+<span class="fc" id="L54">		return;</span>
+	}
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+	@Transactional
+	public List&lt;DonationCamp&gt; getByAddress(String address) {
+<span class="fc" id="L60">		Query query = getSession().createQuery(&quot;from DonationCamp where address=:address&quot;);</span>
+<span class="fc" id="L61">		query.setParameter(&quot;address&quot;, address);</span>
+<span class="fc" id="L62">		return query.list();</span>
+	}
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+	@Transactional
+	public List&lt;DonationCamp&gt; getByUserID(int userID) {
+<span class="fc" id="L68">		List&lt;DonationCamp&gt; camps = getSession().getNamedQuery(&quot;DonationCamp.findByUserID&quot;).setInteger(&quot;userID&quot;, userID)</span>
+<span class="fc" id="L69">				.list();</span>
+<span class="fc" id="L70">		return camps;</span>
+	}
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+	@Transactional
+	public List&lt;DonationCamp&gt; getByAddressCategory(String address, int category) {
+<span class="fc" id="L76">		Query query = getSession().createQuery(&quot;from DonationCamp where address=:address and campCategoryID=:category&quot;);</span>
+<span class="fc" id="L77">		query.setParameter(&quot;address&quot;, address);</span>
+<span class="fc" id="L78">		query.setParameter(&quot;category&quot;, category);</span>
+<span class="fc" id="L79">		return query.list();</span>
+
+	}
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+	@Transactional
+	public List&lt;DonationCamp&gt; getByCategoryID(int category) {
+
+<span class="nc" id="L87">		List&lt;DonationCamp&gt; camps = getSession().getNamedQuery(&quot;DonationCamp.findByCampCategoryID&quot;)</span>
+<span class="nc" id="L88">				.setInteger(&quot;campCategoryID&quot;, category).list();</span>
+<span class="nc" id="L89">		return camps;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

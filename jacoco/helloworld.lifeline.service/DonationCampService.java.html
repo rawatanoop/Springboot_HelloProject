@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DonationCampService.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lifeline</a> &gt; <a href="index.source.html" class="el_package">helloworld.lifeline.service</a> &gt; <span class="el_source">DonationCampService.java</span></div><h1>DonationCampService.java</h1><pre class="source lang-java linenums">package helloworld.lifeline.service;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.hibernate.ObjectNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import helloworld.lifeline.controller.LoginController;
+import helloworld.lifeline.dao.DonationCampDao;
+import helloworld.lifeline.entity.DonationCamp;
+import helloworld.lifeline.misc.Logger;
+import helloworld.lifeline.misc.Utility;
+import helloworld.lifeline.model.CategoryModel;
+import helloworld.lifeline.model.DonationCampModel;
+import helloworld.lifeline.model.UserModel;
+import helloworld.lifeline.model.VolunteerModel;
+import inti.ws.spring.exception.client.BadRequestException;
+import inti.ws.spring.exception.client.NotFoundException;
+
+@Service
+<span class="fc" id="L24">public class DonationCampService /* implements IDonationCampService */ {</span>
+
+	@Autowired
+	private DonationCampDao dcDao;
+
+	@Autowired
+	private ICategoryService dcCategoryService;
+
+	@Autowired
+	private IVolunteerService dcVolunteerService;
+
+	@Autowired
+	private IUserService userService;
+
+<span class="fc" id="L38">	private static final Logger logger = Logger.getInstance(LoginController.class);</span>
+
+	/****
+	 * Creates a donation camp record with @param campModel in the database.
+	 * 
+	 * @param campModel
+	 */
+	public void create(DonationCampModel campModel) {
+<span class="fc" id="L46">		logger.info(&quot;Request for creating a donation camp record started&quot;);</span>
+<span class="fc" id="L47">		DonationCamp camp = getEntity(campModel);</span>
+<span class="fc" id="L48">		logger.info(&quot;Request forcreating a donation camp record ended successfully&quot;);</span>
+<span class="fc" id="L49">		dcDao.save(camp);</span>
+<span class="fc" id="L50">	}</span>
+
+	/**
+	 * Return the camp details for a particular @param id.
+	 * 
+	 * @param id
+	 * @return
+	 * @throws BadRequestException
+	 * @throws ObjectNotFoundException
+	 */
+	public DonationCampModel getByID(int id) throws BadRequestException, ObjectNotFoundException {
+<span class="fc" id="L61">		logger.info(&quot;Request for geting a donation camp record strted&quot;);</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">		if (isValidID(id)) {</span>
+<span class="fc" id="L63">			DonationCampModel model = getModel(dcDao.getById(id));</span>
+<span class="fc" id="L64">			logger.info(&quot;Request for geting a donation camp record ended successfully&quot;);</span>
+<span class="fc" id="L65">			return model;</span>
+		}
+
+		else {
+<span class="fc" id="L69">			logger.info(&quot;Request for geting a donation camp record failed&quot;);</span>
+<span class="fc" id="L70">			throw new BadRequestException(Utility.InvalidID);</span>
+		}
+
+	}
+
+	/**
+	 * Returns all the camp's details available in the records.
+	 * 
+	 * @return
+	 * @throws NotFoundException
+	 */
+	public List&lt;DonationCampModel&gt; getAll() throws NotFoundException {
+<span class="fc" id="L82">		logger.info(&quot;Request for creating a donation camp record started&quot;);</span>
+<span class="fc" id="L83">		List&lt;DonationCamp&gt; list = dcDao.getAll();</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">		if (list == null) {</span>
+<span class="nc" id="L85">			logger.error(&quot;Request for creating a donation camp record failed&quot;);</span>
+<span class="nc" id="L86">			throw new NotFoundException(Utility.NotFound);</span>
+		}
+<span class="fc" id="L88">		List&lt;DonationCampModel&gt; models = getModelList(list);</span>
+<span class="fc" id="L89">		logger.info(&quot;Request for creating a donation camp record ended successfully&quot;);</span>
+<span class="fc" id="L90">		return models;</span>
+	}
+
+	/**
+	 * Utility method which converts entities list into models.
+	 * 
+	 * @param entityList
+	 * @return
+	 */
+	private List&lt;DonationCampModel&gt; getModelList(List&lt;DonationCamp&gt; entityList) {
+<span class="fc" id="L100">		List&lt;DonationCampModel&gt; list = new ArrayList&lt;DonationCampModel&gt;();</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">		for (Iterator&lt;DonationCamp&gt; iterator = entityList.iterator(); iterator.hasNext();) {</span>
+<span class="fc" id="L102">			list.add(getModel(iterator.next()));</span>
+
+		}
+<span class="fc" id="L105">		return list;</span>
+
+	}
+
+	/***
+	 * Returns details for all camps for @param address
+	 * 
+	 * @param address
+	 * @return
+	 * @throws NotFoundException
+	 */
+	public List&lt;DonationCampModel&gt; getByAddress(String address) throws NotFoundException {
+<span class="fc" id="L117">		logger.info(&quot;Request for details for a donation camp with address started&quot;);</span>
+<span class="fc" id="L118">		List&lt;DonationCamp&gt; list = dcDao.getByAddress(address);</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">		if (list == null) {</span>
+<span class="nc" id="L120">			throw new NotFoundException(Utility.NotFound);</span>
+		}
+<span class="fc" id="L122">		List&lt;DonationCampModel&gt; models = getModelList(dcDao.getByAddress(address));</span>
+<span class="fc" id="L123">		logger.info(&quot;Request for details for a donation camp with address ended successfully&quot;);</span>
+<span class="fc" id="L124">		return models;</span>
+	}
+
+	/***
+	 * Utility method which converts models into entities
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	private DonationCampModel getModel(DonationCamp entity) {
+<span class="fc" id="L134">		DonationCampModel model = new DonationCampModel();</span>
+<span class="fc" id="L135">		model.setId(entity.getId());</span>
+<span class="fc" id="L136">		model.setUserID(entity.getUserID());</span>
+<span class="fc" id="L137">		model.setCampCategoryID(entity.getCampCategoryID());</span>
+<span class="fc" id="L138">		model.setAddress(entity.getAddress());</span>
+<span class="fc" id="L139">		model.setStartDate(entity.getStartDate());</span>
+<span class="fc" id="L140">		model.setEndDate(entity.getEndDate());</span>
+<span class="fc" id="L141">		model.setUnit(entity.getUnit());</span>
+<span class="fc" id="L142">		model.setUnitLeft(entity.getUnitLeft());</span>
+<span class="fc" id="L143">		return model;</span>
+
+	}
+
+	/***
+	 * Utility method which converts model into entity.
+	 * 
+	 * @param model
+	 * @return
+	 */
+	private DonationCamp getEntity(DonationCampModel model) {
+<span class="fc" id="L154">		DonationCamp entity = new DonationCamp();</span>
+<span class="fc" id="L155">		entity.setId(model.getId());</span>
+<span class="fc" id="L156">		entity.setUserID(model.getUserID());</span>
+<span class="fc" id="L157">		entity.setCampCategoryID(model.getCampCategoryID());</span>
+<span class="fc" id="L158">		entity.setStartDate(model.getStartDate());</span>
+<span class="fc" id="L159">		entity.setEndDate(model.getEndDate());</span>
+<span class="fc" id="L160">		entity.setAddress(model.getAddress());</span>
+<span class="fc" id="L161">		entity.setUnit(model.getUnit());</span>
+<span class="fc" id="L162">		entity.setUnitLeft(model.getUnitLeft());</span>
+<span class="fc" id="L163">		return entity;</span>
+
+	}
+
+	/**
+	 * Checks whether a id is valid so that it can be saved in the records.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private boolean isValidID(int id) {
+<span class="fc bfc" id="L174" title="All 2 branches covered.">		if (id &gt;= 0)</span>
+<span class="fc" id="L175">			return true;</span>
+<span class="fc" id="L176">		return false;</span>
+
+	}
+
+	/**
+	 * Returns all the camps with @param address and @param category. Category
+	 * id =0 represents all categories.
+	 * 
+	 * @param address
+	 * @param category
+	 * @return
+	 * @throws NotFoundException
+	 */
+	public List&lt;DonationCampModel&gt; getByAddressCategory(String address, int category) throws NotFoundException {
+<span class="pc bpc" id="L190" title="2 of 4 branches missed.">		if (address.equalsIgnoreCase(&quot;all&quot;) &amp; category == 0) {</span>
+<span class="nc" id="L191">			return getModelList(dcDao.getAll());</span>
+
+		}
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">		if (address.equalsIgnoreCase(&quot;all&quot;)) {</span>
+<span class="nc" id="L195">			return getModelList(dcDao.getByCategoryID(category));</span>
+
+		}
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">		if (category == 0) {</span>
+<span class="nc" id="L199">			return getModelList(dcDao.getByAddress(address));</span>
+		}
+<span class="fc" id="L201">		List&lt;DonationCamp&gt; list = dcDao.getByAddressCategory(address, category);</span>
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">		if (list == null)</span>
+<span class="nc" id="L203">			throw new NotFoundException(Utility.NotFound);</span>
+<span class="fc" id="L204">		return getModelList(list);</span>
+	}
+
+	/***
+	 * Returns all the camps created by a particular user.
+	 * 
+	 * @param id
+	 * @return
+	 * @throws NotFoundException
+	 */
+	public List&lt;DonationCampModel&gt; getByUserID(int id) throws NotFoundException {
+<span class="fc" id="L215">		List&lt;DonationCamp&gt; list = dcDao.getByUserID(id);</span>
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">		if (list == null)</span>
+<span class="nc" id="L217">			throw new NotFoundException(Utility.NotFound);</span>
+<span class="fc" id="L218">		return getModelList(list);</span>
+
+	}
+
+	/***
+	 * This method fills the category details in camps.
+	 * 
+	 * @param campList
+	 * @return
+	 */
+	public List&lt;DonationCampModel&gt; fillCategoryName(List&lt;DonationCampModel&gt; campList) {
+<span class="fc bfc" id="L229" title="All 2 branches covered.">		for (DonationCampModel donationCampModel : campList) {</span>
+<span class="fc" id="L230">			CategoryModel cat = dcCategoryService.getByID(donationCampModel.getCampCategoryID());</span>
+<span class="fc" id="L231">			donationCampModel.setCategoryName(cat.getCategory());</span>
+<span class="fc" id="L232">			donationCampModel.setSubCategoryName(cat.getSubCategory());</span>
+<span class="fc" id="L233">		}</span>
+<span class="fc" id="L234">		return campList;</span>
+
+	}
+
+	/***
+	 * Returns the volunteer list for camp @param campID with request
+	 * status @param requestStatus.
+	 * 
+	 * @param campID
+	 * @param requestStatus
+	 * @return
+	 * @throws NotFoundException
+	 * @throws BadRequestException
+	 */
+	public List&lt;UserModel&gt; getVolunteerForCamp(int campID, String requestStatus)
+			throws NotFoundException, BadRequestException {
+<span class="nc" id="L250">		List&lt;VolunteerModel&gt; volunteerList = dcVolunteerService.getVolunteerForCamp(campID, requestStatus);</span>
+<span class="nc" id="L251">		List&lt;UserModel&gt; users = new ArrayList&lt;UserModel&gt;();</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">		for (VolunteerModel volunteerModel : volunteerList) {</span>
+<span class="nc" id="L253">			UserModel user = userService.getByID(volunteerModel.getUserID());</span>
+<span class="nc" id="L254">			user.setCampID(campID);</span>
+<span class="nc" id="L255">			user.setUnitDonate(volunteerModel.getUnitDonate());</span>
+<span class="nc" id="L256">			users.add(user);</span>
+<span class="nc" id="L257">		}</span>
+<span class="nc" id="L258">		return users;</span>
+
+	}
+
+	/***
+	 * Updates the camp details with @param camp.
+	 * 
+	 * @param camp
+	 */
+	public void update(DonationCampModel camp) {
+<span class="fc" id="L268">		dcDao.update(getEntity(camp));</span>
+<span class="fc" id="L269">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

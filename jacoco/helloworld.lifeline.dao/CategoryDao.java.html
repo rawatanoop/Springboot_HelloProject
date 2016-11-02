@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CategoryDao.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lifeline</a> &gt; <a href="index.source.html" class="el_package">helloworld.lifeline.dao</a> &gt; <span class="el_source">CategoryDao.java</span></div><h1>CategoryDao.java</h1><pre class="source lang-java linenums">package helloworld.lifeline.dao;
+
+import java.io.Serializable;
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import helloworld.lifeline.entity.DonationCampCategory;
+
+@Repository
+<span class="fc" id="L15">public class CategoryDao implements ICategoryDao&lt;DonationCampCategory&gt; {</span>
+
+	@Autowired
+	private SessionFactory _sessionFactory;
+
+	private Session getSession() {
+<span class="fc" id="L21">		return _sessionFactory.getCurrentSession();</span>
+	}
+
+
+	@Override
+	@Transactional
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;DonationCampCategory&gt; getAll() {
+<span class="fc" id="L29">		return getSession().createQuery(&quot;from DonationCampCategory&quot;).list();</span>
+	}
+
+	@Override
+	@Transactional
+	public DonationCampCategory getById(Integer categoryID) {
+<span class="fc" id="L35">		DonationCampCategory category = getSession().load(DonationCampCategory.class, categoryID);</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">		if (category.getId() == categoryID)</span>
+<span class="fc" id="L37">			return category;</span>
+<span class="nc" id="L38">		return null;</span>
+	}
+
+
+	@Override
+	public Serializable save(DonationCampCategory entity) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L45">		return null;</span>
+	}
+
+
+	@Override
+	public void delete(DonationCampCategory entity) {
+		
+<span class="nc" id="L52">	}</span>
+
+
+	@Override
+	public void update(DonationCampCategory entity) {
+		
+<span class="nc" id="L58">	}</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

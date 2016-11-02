@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ApplicationConfiguration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lifeline</a> &gt; <a href="index.source.html" class="el_package">helloworld.lifeline.configs</a> &gt; <span class="el_source">ApplicationConfiguration.java</span></div><h1>ApplicationConfiguration.java</h1><pre class="source lang-java linenums">package helloworld.lifeline.configs;
+
+import java.util.Properties;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+
+import org.apache.catalina.session.StandardSessionFacade;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import helloworld.lifeline.controller.LoginController;
+import helloworld.lifeline.misc.Logger;
+import inti.ws.spring.exception.client.ForbiddenException;
+
+@Configuration
+@EnableTransactionManagement
+/***
+ * For sessopn Management
+ * 
+ * @author anoop
+ *
+ */
+<span class="fc" id="L33">public class ApplicationConfiguration extends WebMvcConfigurerAdapter {</span>
+
+	@Value(&quot;${db.driver}&quot;)
+	private String DB_DRIVER;
+
+	@Value(&quot;${db.password}&quot;)
+	private String DB_PASSWORD;
+
+	@Value(&quot;${db.url}&quot;)
+	private String DB_URL;
+
+	@Value(&quot;${db.username}&quot;)
+	private String DB_USERNAME;
+
+	@Value(&quot;${hibernate.dialect}&quot;)
+	private String HIBERNATE_DIALECT;
+
+	@Value(&quot;${hibernate.show_sql}&quot;)
+	private String HIBERNATE_SHOW_SQL;
+
+	@Value(&quot;${hibernate.hbm2ddl.auto}&quot;)
+	private String HIBERNATE_HBM2DDL_AUTO;
+
+	@Value(&quot;${entitymanager.packagesToScan}&quot;)
+	private String ENTITYMANAGER_PACKAGES_TO_SCAN;
+
+	@Bean
+	public DataSource dataSource() {
+<span class="nc" id="L61">		DriverManagerDataSource dataSource = new DriverManagerDataSource();</span>
+<span class="nc" id="L62">		dataSource.setDriverClassName(DB_DRIVER);</span>
+<span class="nc" id="L63">		dataSource.setUrl(DB_URL);</span>
+<span class="nc" id="L64">		dataSource.setUsername(DB_USERNAME);</span>
+<span class="nc" id="L65">		dataSource.setPassword(DB_PASSWORD);</span>
+<span class="nc" id="L66">		return dataSource;</span>
+	}
+
+	@Bean
+	public LocalSessionFactoryBean sessionFactory() {
+<span class="nc" id="L71">		LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();</span>
+<span class="nc" id="L72">		sessionFactoryBean.setDataSource(dataSource());</span>
+<span class="nc" id="L73">		sessionFactoryBean.setPackagesToScan(ENTITYMANAGER_PACKAGES_TO_SCAN);</span>
+<span class="nc" id="L74">		Properties hibernateProperties = new Properties();</span>
+<span class="nc" id="L75">		hibernateProperties.put(&quot;hibernate.dialect&quot;, HIBERNATE_DIALECT);</span>
+<span class="nc" id="L76">		hibernateProperties.put(&quot;hibernate.show_sql&quot;, HIBERNATE_SHOW_SQL);</span>
+<span class="nc" id="L77">		hibernateProperties.put(&quot;hibernate.hbm2ddl.auto&quot;, HIBERNATE_HBM2DDL_AUTO);</span>
+<span class="nc" id="L78">		sessionFactoryBean.setHibernateProperties(hibernateProperties);</span>
+
+<span class="nc" id="L80">		return sessionFactoryBean;</span>
+	}
+
+	@Bean
+	public HibernateTransactionManager transactionManager() {
+<span class="nc" id="L85">		HibernateTransactionManager transactionManager = new HibernateTransactionManager();</span>
+<span class="nc" id="L86">		transactionManager.setSessionFactory(sessionFactory().getObject());</span>
+<span class="nc" id="L87">		return transactionManager;</span>
+	}
+
+	/***
+	 * Registering our Interceptor to intercept all @Controller requests before
+	 * they are handled by their respective controllers
+	 * 
+	 * @author anoop
+	 *
+	 */
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+<span class="fc" id="L99">		registry.addInterceptor(new TransactionInterceptor());</span>
+
+<span class="fc" id="L101">	}</span>
+
+}
+
+/***
+ * For session Management
+ * 
+ * @author anoop
+ *
+ */
+<span class="fc" id="L111">class TransactionInterceptor extends HandlerInterceptorAdapter {</span>
+<span class="fc" id="L112">	private static final Logger logger = Logger.getInstance(TransactionInterceptor.class);</span>
+
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
+<span class="nc" id="L117">		logger.info(&quot;Request &quot;+request.getRequestURI()+&quot; preprocessing in TransactionInterceptor&quot;);</span>
+<span class="nc" id="L118">		StandardSessionFacade session = (StandardSessionFacade) request.getSession();</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">		if (request.getRequestURI().toLowerCase().contains((&quot;/error&quot;))) {</span>
+<span class="nc" id="L120">			logger.error(&quot;Request for error page : Request preprocessing in TransactionInterceptor&quot;);</span>
+<span class="nc" id="L121">			return true;</span>
+		}
+
+<span class="nc bnc" id="L124" title="All 4 branches missed.">		if (!request.getRequestURI().toLowerCase().contains((&quot;/home&quot;)) &amp;&amp; session.getAttribute(&quot;user&quot;) == null) {</span>
+
+<span class="nc" id="L126">			logger.error(&quot;Request &quot;+ request.getRequestURI() +&quot; rejected :User is not logged-in&quot;);</span>
+<span class="nc" id="L127">			throw new ForbiddenException(&quot;User is not logged-in&quot;);</span>
+		}
+<span class="nc" id="L129">		logger.info(&quot;Valid request  &quot;+request.getRequestURI()+&quot; : Request preprocessing in TransactionInterceptor&quot;);</span>
+<span class="nc" id="L130">		return true;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

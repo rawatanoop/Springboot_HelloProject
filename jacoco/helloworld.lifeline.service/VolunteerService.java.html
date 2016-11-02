@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>VolunteerService.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lifeline</a> &gt; <a href="index.source.html" class="el_package">helloworld.lifeline.service</a> &gt; <span class="el_source">VolunteerService.java</span></div><h1>VolunteerService.java</h1><pre class="source lang-java linenums">package helloworld.lifeline.service;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+
+import helloworld.lifeline.controller.LoginController;
+import helloworld.lifeline.dao.IVolunteerDao;
+import helloworld.lifeline.entity.DonationCampVolunteer;
+import helloworld.lifeline.entity.DonationCampVolunteerPK;
+import helloworld.lifeline.misc.Logger;
+import helloworld.lifeline.misc.Utility;
+import helloworld.lifeline.model.CategoryModel;
+import helloworld.lifeline.model.DonationCampModel;
+import helloworld.lifeline.model.VolunteerModel;
+import inti.ws.spring.exception.client.BadRequestException;
+import inti.ws.spring.exception.client.NotFoundException;
+
+@Service
+<span class="fc" id="L24">public class VolunteerService implements IVolunteerService {</span>
+
+	@Autowired
+	private IVolunteerDao&lt;DonationCampVolunteer&gt; dcVolunteerDao;
+
+	@Autowired
+	private ICategoryService dcCategoryService;
+
+	@Autowired
+	private DonationCampService dcService;
+
+<span class="fc" id="L35">	private static final Logger logger = Logger.getInstance(LoginController.class);</span>
+
+	@Override
+	public void create(VolunteerModel volunteer) throws DataIntegrityViolationException {
+
+<span class="fc" id="L40">		dcVolunteerDao.save(getEntity(volunteer));</span>
+<span class="fc" id="L41">	}</span>
+
+	@Override
+	public List&lt;DonationCampModel&gt; getCampForUser(int id, String status) throws BadRequestException {
+<span class="fc" id="L45">		logger.info(&quot;Request for getting all camps for user with particular status started&quot;);</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">		if (!isVAalidID(id))</span>
+<span class="nc" id="L47">			throw new BadRequestException(Utility.InvalidID);</span>
+<span class="fc" id="L48">		List&lt;VolunteerModel&gt; list = getModelList(dcVolunteerDao.getAllByUserStatus(id, status));</span>
+<span class="fc" id="L49">		ArrayList&lt;DonationCampModel&gt; campList = new ArrayList&lt;DonationCampModel&gt;();</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">		for (VolunteerModel volunteerModel : list) {</span>
+<span class="fc" id="L51">			DonationCampModel camp = dcService.getByID(volunteerModel.getCampID());</span>
+<span class="fc" id="L52">			camp.setUnitDonate(volunteerModel.getUnitDonate());</span>
+<span class="fc" id="L53">			campList.add(camp);</span>
+<span class="fc" id="L54">		}</span>
+<span class="fc" id="L55">		List&lt;DonationCampModel&gt; camps = fillCategoryName(campList);</span>
+<span class="fc" id="L56">		logger.info(&quot;Request for getting all camps for user with particular status ended successfully&quot;);</span>
+<span class="fc" id="L57">		return camps;</span>
+
+	}
+
+	/***
+	 * Utility method to fill category details into camps
+	 * 
+	 * @param campList
+	 * @return
+	 */
+	private List&lt;DonationCampModel&gt; fillCategoryName(List&lt;DonationCampModel&gt; campList) {
+<span class="fc bfc" id="L68" title="All 2 branches covered.">		for (DonationCampModel donationCampModel : campList) {</span>
+<span class="fc" id="L69">			CategoryModel cat = dcCategoryService.getByID(donationCampModel.getCampCategoryID());</span>
+<span class="fc" id="L70">			donationCampModel.setCategoryName(cat.getCategory());</span>
+<span class="fc" id="L71">			donationCampModel.setSubCategoryName(cat.getSubCategory());</span>
+<span class="fc" id="L72">		}</span>
+<span class="fc" id="L73">		return campList;</span>
+
+	}
+
+	@Override
+	public List&lt;VolunteerModel&gt; getByCampID(int id) throws BadRequestException {
+<span class="fc bfc" id="L79" title="All 2 branches covered.">		if (!isVAalidID(id))</span>
+<span class="fc" id="L80">			throw new BadRequestException(Utility.InvalidID);</span>
+<span class="fc" id="L81">		return getModelList(dcVolunteerDao.getAllByCampID(id));</span>
+	}
+
+	@Override
+	public void update(VolunteerModel volunteer) throws BadRequestException {
+<span class="fc bfc" id="L86" title="All 2 branches covered.">		if (volunteer.getRequestStatus().equalsIgnoreCase(&quot;Accept&quot;)) {</span>
+<span class="fc" id="L87">			DonationCampModel camp = dcService.getByID(volunteer.getCampID());</span>
+<span class="fc" id="L88">			camp.setUnitLeft(camp.getUnit() - volunteer.getUnitDonate());</span>
+<span class="fc" id="L89">			dcService.update(camp);</span>
+<span class="fc" id="L90">			dcVolunteerDao.update(getEntity(volunteer));</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">		} else if (volunteer.getRequestStatus().equalsIgnoreCase(&quot;Reject&quot;)) {</span>
+<span class="nc" id="L92">			dcVolunteerDao.update(getEntity(volunteer));</span>
+		} else
+<span class="fc" id="L94">			throw new BadRequestException(&quot;Voulteer status is not correct&quot;);</span>
+
+<span class="fc" id="L96">	}</span>
+
+	/**
+	 * Utility method to convert a entity into model.
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	private VolunteerModel getModel(DonationCampVolunteer entity) {
+<span class="fc" id="L105">		VolunteerModel model = new VolunteerModel();</span>
+<span class="fc" id="L106">		model.setUserID(entity.getDonationCampVolenteerPK().getUserID());</span>
+<span class="fc" id="L107">		model.setCampID(entity.getDonationCampVolenteerPK().getCampID());</span>
+<span class="fc" id="L108">		model.setRequestStatus(entity.getRequestStatus());</span>
+<span class="fc" id="L109">		model.setUnitDonate(entity.getUnitDonate());</span>
+<span class="fc" id="L110">		return model;</span>
+
+	}
+
+	@Override
+	public List&lt;VolunteerModel&gt; getVolunteerForCamp(int campID, String status) throws NotFoundException {
+<span class="fc" id="L116">		List&lt;DonationCampVolunteer&gt; list = dcVolunteerDao.getVolunteerForCamp(campID, status);</span>
+<span class="pc bpc" id="L117" title="1 of 6 branches missed.">		if (list == null|list.size()==0)</span>
+<span class="fc" id="L118">			throw new NotFoundException(Utility.NotFound);</span>
+
+<span class="fc" id="L120">		return getModelList(list);</span>
+
+	}
+
+	/***
+	 * Utility method to convert model into entity
+	 * 
+	 * @param model
+	 * @return
+	 */
+	private DonationCampVolunteer getEntity(VolunteerModel model) {
+<span class="fc" id="L131">		DonationCampVolunteer entity = new DonationCampVolunteer(</span>
+<span class="fc" id="L132">				new DonationCampVolunteerPK(model.getUserID(), model.getCampID()));</span>
+<span class="fc" id="L133">		entity.setRequestStatus(model.getRequestStatus());</span>
+<span class="fc" id="L134">		return entity;</span>
+	}
+
+	/***
+	 * Utility method to convert entities into models.
+	 * 
+	 * @param entityList
+	 * @return
+	 */
+	private List&lt;VolunteerModel&gt; getModelList(List&lt;DonationCampVolunteer&gt; entityList) {
+<span class="fc" id="L144">		List&lt;VolunteerModel&gt; list = new ArrayList&lt;VolunteerModel&gt;();</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">		for (Iterator&lt;DonationCampVolunteer&gt; iterator = entityList.iterator(); iterator.hasNext();) {</span>
+<span class="fc" id="L146">			list.add(getModel(iterator.next()));</span>
+
+		}
+<span class="fc" id="L149">		return list;</span>
+
+	}
+
+	/**
+	 * Checks whether a id is valid or not.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private boolean isVAalidID(int id) {
+<span class="fc bfc" id="L160" title="All 2 branches covered.">		if (id &gt; 0)</span>
+<span class="fc" id="L161">			return true;</span>
+		else
+<span class="fc" id="L163">			return false;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
