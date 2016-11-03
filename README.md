@@ -10,7 +10,7 @@ A sprinboot project which provides the following functionalities-
 
 ## Project Documentation
 
-* Apiary documentation can be found [here](https://github.com/rawatanoop/helloworld.lifeLine/blob/master/apiary.apib )
+* Apiary documentation can be found [here](https://app.apiary.io/rawatanoop/editor )
 * The ER diagram of the Database [here](https://drive.google.com/drive/folders/0Byun6YOvkyY-bHh1ZE02TloyeFU )
 * Requirement Documentation for the project [here](https://drive.google.com/drive/folders/0Byun6YOvkyY-bHh1ZE02TloyeFU)
 * Project plan [here](https://drive.google.com/drive/folders/0Byun6YOvkyY-bHh1ZE02TloyeFU)
