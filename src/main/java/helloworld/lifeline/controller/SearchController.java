@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,22 +27,6 @@ public class SearchController {
 
 	private static final Logger logger = Logger.getInstance(SearchController.class);
 
-	/***
-	 * Return all the available donation camps.
-	 * 
-	 * @return
-	 * @throws NotFoundException
-	 * @throws BadRequestException
-	 */
-	@RequestMapping(value = "/all")
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public List<DonationCampModel> getAll() throws NotFoundException, BadRequestException {
-		logger.info("Request for all the camp started");
-		List<DonationCampModel> list = dcService.getAll();
-		logger.info("Request for all the camp ended successfully");
-		return list;
-	}
 
 	/****
 	 * This method returns all the camps with given @param address and @param
@@ -54,7 +39,7 @@ public class SearchController {
 	 * @throws BadRequestException
 	 */
 
-	@RequestMapping(value = "/filter")
+	@RequestMapping(value = "/filter" ,method = RequestMethod.GET)
 	@ResponseBody
 	public List<DonationCampModel> getByAddressCategory(String address, int category)
 			throws NotFoundException, BadRequestException {

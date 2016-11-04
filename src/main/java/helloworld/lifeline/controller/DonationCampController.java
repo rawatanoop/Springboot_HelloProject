@@ -61,24 +61,6 @@ public class DonationCampController {
 		logger.info("Request for creating  a camp successfully ended");
 	}
 
-	/***
-	 * Returns the @DonationCamp associated with given @param id .
-	 * 
-	 * @param id
-	 * @return
-	 * @throws BadRequestException
-	 * @throws NotFoundException
-	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public DonationCampModel getByID(@PathVariable("id") int id) throws BadRequestException, NotFoundException {
-		logger.info("Request for getting  a camp started");
-		DonationCampModel camp = dcService.getByID(id);
-		logger.info("Request for getting  a camp successfully ended");
-		return camp;
-
-	}
 
 	/****
 	 * Returns all the camps created by the user.
@@ -97,24 +79,6 @@ public class DonationCampController {
 		logger.info("Request for camps created by the user ended successfully");
 		return list;
 
-	}
-
-	/***
-	 * Returns all the available camps.
-	 * 
-	 * @param session
-	 * @return
-	 * @throws NotFoundException
-	 * @throws BadRequestException
-	 */
-	@RequestMapping(value = "/all")
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public List<DonationCampModel> getAll(HttpSession session) throws NotFoundException, BadRequestException {
-		logger.info("Reading all donation camps stated");
-		List<DonationCampModel> list = dcService.getAll();
-		logger.info("Reading all donation camps ended successfully");
-		return list;
 	}
 
 	/***

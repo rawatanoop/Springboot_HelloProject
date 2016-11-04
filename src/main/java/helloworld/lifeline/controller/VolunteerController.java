@@ -32,26 +32,8 @@ public class VolunteerController {
 	private IVolunteerService volunteerService;
 
 	@Autowired
-	private DonationCampService dcService;
 	private static final Logger logger = Logger.getInstance(VolunteerController.class);
 
-	/****
-	 * Returns the camp associated with amp id @param id
-	 * 
-	 * @param id
-	 * @return
-	 * @throws BadRequestException
-	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public DonationCampModel getByCampID(@PathVariable("id") int id) throws BadRequestException {
-		logger.info("Request for geting a cmp with given id started");
-		DonationCampModel model = dcService.getByID(id);
-		logger.info("Request for geting a cmp with given id ended successfully");
-		return model;
-
-	}
 
 	/****
 	 * Creates a record with given @param model for a volunteer request.
@@ -95,15 +77,15 @@ public class VolunteerController {
 	 * @return
 	 * @throws BadRequestException
 	 */
-	@RequestMapping(value = "{id}/acceptedRequest")
+	@RequestMapping(value = "/acceptedRequest")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<DonationCampModel> getAccptedReq(@PathVariable("id") int userID, HttpSession session)
+	public List<DonationCampModel> getAccptedReq( HttpSession session)
 			throws BadRequestException {
-		logger.info("Request with status 'Accept' for returning camp details for a volunteer started");
+		logger.info("Request with status 'Accept' for the volunteer started");
 		List<DonationCampModel> list = volunteerService
 				.getCampForUser(((UserModel) session.getAttribute("user")).getId(), "Accept");
-		logger.info("Request with status 'Accept' for returning camp details for a volunteer ended successfully");
+		logger.info("Request with status 'Accept' for the volunteer ended successfully");
 		return list;
 	}
 
@@ -116,10 +98,10 @@ public class VolunteerController {
 	 * @return
 	 * @throws BadRequestException
 	 */
-	@RequestMapping(value = "{id}/pendingRequest")
+	@RequestMapping(value = "/pendingRequest")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<DonationCampModel> getPendingReq(@PathVariable("id") int userID, HttpSession session)
+	public List<DonationCampModel> getPendingReq( HttpSession session)
 			throws BadRequestException {
 		logger.info("Request with status 'Request' for returning camp details for a volunteer started");
 		List<DonationCampModel> list = volunteerService
@@ -137,10 +119,10 @@ public class VolunteerController {
 	 * @return
 	 * @throws BadRequestException
 	 */
-	@RequestMapping(value = "{id}/rejectedRequest")
+	@RequestMapping(value = "/rejectedRequest")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<DonationCampModel> getRejectedReq(@PathVariable("id") int userID, HttpSession session)
+	public List<DonationCampModel> getRejectedReq(HttpSession session)
 			throws BadRequestException {
 		logger.info("Request with status 'Reject' for returning camp details for a volunteer started");
 		List<DonationCampModel> list = volunteerService

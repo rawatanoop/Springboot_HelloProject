@@ -2,7 +2,7 @@
   // for showing the acceptedRequest table contents
 
         var id  = 1;
-        $.get("volunteer/"+id+"/acceptedRequest" ,function(data, status){
+        $.get("volunteer/acceptedRequest" ,function(data, status){
         $.each(data, function (i, item) {
 
        tr = $('<tr/>');
@@ -23,7 +23,7 @@
 
  // for showing the pendingRequest table contents
 
-  $.get("volunteer/"+id+"/pendingRequest" ,function(data, status){
+  $.get("volunteer/pendingRequest" ,function(data, status){
         $.each(data, function (i, item) {
 
        tr = $('<tr/>');
@@ -44,7 +44,7 @@
         
         // for showing the pendingRequest table contents
 
-  $.get("volunteer/"+id+"/rejectedRequest" ,function(data, status){
+  $.get("volunteer/rejectedRequest" ,function(data, status){
         $.each(data, function (i, item) {
 
        tr = $('<tr/>');
